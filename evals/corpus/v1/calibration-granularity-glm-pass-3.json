@@ -1,0 +1,47 @@
+{
+  "protocol": "annotation-guide-v1-calibration-granularity-pass-3",
+  "annotator": "glm-5.2",
+  "date": "2026-08-11",
+  "blindTo": [
+    "reference bounds",
+    "generated outputs",
+    "provider configurations"
+  ],
+  "guideRevision": [
+    "critical security, privacy, durability, and release-gate units remain independently reviewable",
+    "unrelated units cannot share a task",
+    "a task covers at most two directly coupled units",
+    "implementation tests may share a task",
+    "maximum is bounded by 1.5 times requirement count"
+  ],
+  "cases": [
+    {
+      "id": "review-identity",
+      "requirementCount": 5,
+      "minimumTasks": 6,
+      "maximumTasks": 8,
+      "rationale": "5 functional requirements (R1-R5). R1 (token minting), R3 (no credential leakage) and R4 (explicit identifiers) are critical security/credential requirements, each independently reviewable; G1 release gate is independent. R2 (review posting) is directly coupled to O1 (its enabling test) into one task; R5 runbook is standalone documentation. Minimum = 3 critical + 1 gate + 1 (R2+O1) + 1 (R5) = 6. Maximum = ceil(1.5*5) = 8."
+    },
+    {
+      "id": "research-pipeline",
+      "requirementCount": 6,
+      "minimumTasks": 5,
+      "maximumTasks": 9,
+      "rationale": "6 functional requirements (R1-R6). R6 (resource bounds plus retaining classified partial failures) is the critical durability/safety requirement; G1 fixture gate is independent. Functional R1-R5 pair by shared data contracts: R1+R2 share the frozen question/budget, R3+R4 share canonical source/provenance records, R5 (export) standalone -> 3 tasks. Ordering constraints O1-O3 fold into their implementation tasks. Minimum = 1 (R6) + 1 (G1) + 3 = 5. Maximum = ceil(1.5*6) = 9."
+    },
+    {
+      "id": "relay-outbox",
+      "requirementCount": 6,
+      "minimumTasks": 6,
+      "maximumTasks": 9,
+      "rationale": "6 functional requirements (R1-R6). R2 (durable persist-before-ack), R4 (fail-closed capture, no silent loss) and R6 (redaction before storage) are critical durability/safety/privacy requirements, each independently reviewable; G1 crash-recovery gate is independent. R1 (capture) and R3 (delivery) are directly coupled via the shared event-identifier/session identity model into one task; R5 (fail-open hooks) is standalone. O1-O2 fold into implementation. Minimum = 3 critical + 1 gate + 1 (R1+R3) + 1 (R5) = 6. Maximum = ceil(1.5*6) = 9."
+    },
+    {
+      "id": "generation-boundary",
+      "requirementCount": 5,
+      "minimumTasks": 5,
+      "maximumTasks": 8,
+      "rationale": "5 functional requirements (R1-R5). R4 (backlog byte-identical on failure) and R5 (state moves only via explicit migration, never a side effect) are critical durability/integrity requirements, each independently reviewable; G1 concurrent-rollout gate is independent. R2 (boundary resolution) and R3 (per-project serialization) are directly coupled via the shared project boundary that O1 ties together into one task; R1 (engine/model pinning) is standalone. Minimum = 2 critical + 1 gate + 1 (R2+R3) + 1 (R1) = 5. Maximum = ceil(1.5*5) = 8."
+    }
+  ]
+}
